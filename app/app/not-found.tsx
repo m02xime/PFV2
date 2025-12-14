@@ -1,12 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCustomCursor } from "./useCustomCursor";
 import { ZdogBackground } from "./components/ZdogBackground";
 
 export default function NotFound() {
-	useCustomCursor();
-
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#020617] px-6 py-10 text-zinc-50 md:px-10">
       <ZdogBackground />

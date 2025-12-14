@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import CursorClient from "./CursorClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maxime KB – Portfolio interactif",
-  description: "Portfolio atypique et interactif de Maxime Kock-Bouabid.",
+	title: "Maxime KB – Portfolio",
+	description: "Portfolio de Maxime Kock-Bouabid.",
 };
 
 export default function RootLayout({
@@ -23,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div id="cursor-root" className="custom-cursor" />
+		<CursorClient />
         {children}
       </body>
     </html>

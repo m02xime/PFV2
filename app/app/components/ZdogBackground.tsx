@@ -3,6 +3,11 @@
 import { useEffect, useRef } from "react";
 import Zdog from "zdog";
 
+type ZdogIllustrationLike = {
+	rotate: { x: number; y: number };
+	updateRenderGraph: () => void;
+};
+
 const palette = {
 	primary: "#38bdf8",
 	accent: "#a855f7",
@@ -12,9 +17,9 @@ const palette = {
 
 export function ZdogBackground() {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
-	const animationRef = useRef<number>();
+	const animationRef = useRef<number | null>(null);
 	const tiltRef = useRef({ targetX: 0, targetY: 0, currentX: 0, currentY: 0 });
-	const illustrationRef = useRef<Zdog.Illustration | null>(null);
+	const illustrationRef = useRef<ZdogIllustrationLike | null>(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -27,7 +32,16 @@ export function ZdogBackground() {
 
 			const zoom = Math.min(innerWidth, innerHeight) / 480;
 
-			illustrationRef.current = new Zdog.Illustration({
+			const Z = Zdog as unknown as {
+				Illustration: new (args: unknown) => ZdogIllustrationLike;
+				Group: new (args: unknown) => unknown;
+				Rect: new (args: unknown) => unknown;
+				Shape: new (args: unknown) => unknown;
+				Ellipse: new (args: unknown) => unknown;
+				Anchor: new (args: unknown) => unknown;
+			};
+
+			illustrationRef.current = new Z.Illustration({
 				element: canvas,
 				dragRotate: false,
 				resize: true,
@@ -45,9 +59,9 @@ export function ZdogBackground() {
 				markers: 65,
 			};
 
-			const boardGroup = new Zdog.Group({ addTo: illo });
+			const boardGroup = new Z.Group({ addTo: illo });
 
-			new Zdog.Rect({
+			new Z.Rect({
 				addTo: boardGroup,
 				width: 320,
 				height: 320,
@@ -59,7 +73,7 @@ export function ZdogBackground() {
 				translate: { z: depth.board },
 			});
 
-			new Zdog.Shape({
+			new Z.Shape({
 				addTo: boardGroup,
 				stroke: 350,
 				color: palette.dark,
@@ -67,7 +81,7 @@ export function ZdogBackground() {
 				translate: { z: depth.board - 20 },
 			});
 
-			new Zdog.Ellipse({
+			new Z.Ellipse({
 				addTo: boardGroup,
 				diameter: 280,
 				stroke: 18,
@@ -76,7 +90,7 @@ export function ZdogBackground() {
 				translate: { z: depth.orbit },
 			});
 
-			new Zdog.Ellipse({
+			new Z.Ellipse({
 				addTo: boardGroup,
 				diameter: 220,
 				stroke: 6,
@@ -85,7 +99,7 @@ export function ZdogBackground() {
 				rotate: { x: Math.PI / 2.3 },
 			});
 
-			const pulse = new Zdog.Shape({
+			const pulse = new Z.Shape({
 				addTo: boardGroup,
 				path: [
 					{ x: -80, y: 0 },
@@ -103,12 +117,12 @@ export function ZdogBackground() {
 				translate: { z: depth.pulse },
 			});
 
-			new Zdog.Anchor({
+			new Z.Anchor({
 				addTo: pulse,
 				rotate: { z: Math.PI },
 			});
 
-			const markers = new Zdog.Group({ addTo: illo, translate: { z: depth.markers } });
+			const markers = new Z.Group({ addTo: illo, translate: { z: depth.markers } });
 			const markerPositions = [
 				{ x: -120, y: -60, color: palette.primary },
 				{ x: 140, y: -40, color: palette.accent },
@@ -117,16 +131,16 @@ export function ZdogBackground() {
 			];
 
 			markerPositions.forEach((pos) => {
-				const dotGroup = new Zdog.Group({ addTo: markers });
+				const dotGroup = new Z.Group({ addTo: markers });
 
-				new Zdog.Shape({
+				new Z.Shape({
 					addTo: dotGroup,
 					stroke: 18,
 					translate: { x: pos.x, y: pos.y },
 					color: pos.color,
 				});
 
-				new Zdog.Shape({
+				new Z.Shape({
 					addTo: dotGroup,
 					visible: false,
 					translate: { x: pos.x * -0.6, y: pos.y * -0.6, z: -30 },

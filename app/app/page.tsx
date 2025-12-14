@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { ZdogBackground } from "./components/ZdogBackground";
 import { useCustomCursor } from "./useCustomCursor";
 
@@ -58,21 +57,6 @@ const STACK_GROUPS = [
 ];
 
 export default function Home() {
-	const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-	useEffect(() => {
-		const handler = (event: MouseEvent) => {
-			const { innerWidth, innerHeight } = window;
-			const x = (event.clientX / innerWidth - 0.5) * 2;
-			const y = (event.clientY / innerHeight - 0.5) * 2;
-			setMousePos({ x, y });
-		};
-
-		window.addEventListener("pointermove", handler);
-		return () => window.removeEventListener("pointermove", handler);
-	}, []);
-
-
 	useCustomCursor();
 
 	return (
@@ -139,10 +123,8 @@ export default function Home() {
 								key={card.title}
 								href={card.href}
 								target={card.href.startsWith("http") ? "_blank" : undefined}
+								rel={card.href.startsWith("http") ? "noreferrer" : undefined}
 								className="group flex flex-col justify-between rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 text-sm shadow-[0_0_20px_rgba(15,23,42,0.7)] transition duration-300 hover:-translate-y-1 hover:border-sky-400/80 hover:bg-zinc-900 hover:shadow-[0_0_45px_rgba(56,189,248,0.55)] md:p-5"
-								style={{
-									transform: `translate3d(${mousePos.x * 4}px, ${mousePos.y * 2}px, 0)`,
-								}}
 							>
 								<div className="space-y-2">
 									<h2 className="text-base font-medium text-zinc-50 md:text-lg">
