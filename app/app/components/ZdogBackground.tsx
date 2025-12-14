@@ -201,7 +201,7 @@ export function ZdogBackground() {
 		<canvas
 			ref={canvasRef}
 			aria-hidden
-			className="pointer-events-none absolute inset-0 h-full w-full opacity-90 [filter:blur(0.5px)]"
+			className="pointer-events-none absolute inset-0 h-full w-full opacity-90 filter-[blur(0.5px)]"
 		/>
 	);
 }
